@@ -2,6 +2,15 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
     <head>
         @include('partials.head')
+
+        <style>
+            [x-cloak] {
+                display: none !important;
+            }
+        </style>
+
+        @filamentStyles
+        @vite('resources/css/app.css')
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
         <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
@@ -14,6 +23,27 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                </flux:navlist.group>
+            </flux:navlist>
+
+            <flux:navlist variant="outline">
+                <flux:navlist.group :heading="__('Management')" class="grid">
+                    <flux:navlist.item icon="users" :href="route('customers.index')" :current="request()->routeIs('customers.index')" wire:navigate>{{ __('Manage Customers') }}</flux:navlist.item>
+                    <flux:navlist.item icon="user-group" :href="route('users.index')" :current="request()->routeIs('users.index')" wire:navigate>{{ __('Manage Users') }}</flux:navlist.item>
+                     <flux:navlist.item icon="banknotes" :href="route('payment.method.index')" :current="request()->routeIs('payment.method.index')" wire:navigate>{{ __('Manage Payment Methods') }}</flux:navlist.item>
+                </flux:navlist.group>
+            </flux:navlist>
+
+            <flux:navlist variant="outline">
+                <flux:navlist.group :heading="__('Inventory Management')" class="grid">
+                    <flux:navlist.item icon="cube" :href="route('items.index')" :current="request()->routeIs('items.index')" wire:navigate>{{ __('Items') }}</flux:navlist.item>
+                    <flux:navlist.item icon="queue-list" :href="route('inventories.index')" :current="request()->routeIs('inventories.index')" wire:navigate>{{ __('Inventory') }}</flux:navlist.item>
+                </flux:navlist.group>
+            </flux:navlist>
+
+            <flux:navlist variant="outline">
+                <flux:navlist.group :heading="__('Sales')" class="grid">
+                    <flux:navlist.item icon="chart-bar" :href="route('sales.index')" :current="request()->routeIs('sales.index')" wire:navigate>{{ __('Sales') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
@@ -127,6 +157,12 @@
 
         {{ $slot }}
 
+         @livewire('notifications') {{-- Only required if you wish to send flash notifications --}}
+
+        @filamentScripts
+        @vite('resources/js/app.js')
+
         @fluxScripts
+
     </body>
 </html>
