@@ -5,9 +5,11 @@ namespace App\Livewire\Sales;
 use App\Models\Sale;
 use Livewire\Component;
 use Filament\Tables\Table;
+use Filament\Actions\Action;
 use Illuminate\Contracts\View\View;
 use Filament\Actions\BulkActionGroup;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Schemas\Contracts\HasSchemas;
@@ -36,7 +38,17 @@ class ListSales extends Component implements HasActions, HasSchemas, HasTable
                 //
             ])
             ->recordActions([
-                //
+                Action::make('Delete')
+                // ->Icon('heroicon-o-trash')
+                    ->requiresConfirmation()
+                    ->color('danger')
+                    ->action(fn (Sale $record) => $record->delete())
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Sale deleted successfully')
+                            //->body('Inventory Deleted successfully.')
+                    ),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

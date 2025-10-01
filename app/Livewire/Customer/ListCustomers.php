@@ -5,16 +5,18 @@ namespace App\Livewire\Customer;
 use Livewire\Component;
 use App\Models\Customer;
 use Filament\Tables\Table;
+use Filament\Actions\Action;
 use Illuminate\Contracts\View\View;
 use Filament\Actions\BulkActionGroup;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Schemas\Contracts\HasSchemas;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
-use Filament\Tables\Columns\TextColumn;
 
 class ListCustomers extends Component implements HasActions, HasSchemas, HasTable
 {
@@ -30,18 +32,16 @@ class ListCustomers extends Component implements HasActions, HasSchemas, HasTabl
                 TextColumn::make('id'),
 
                 TextColumn::make('name')
-                    ->label('Customer')
-                    ->searchable(),
+                    ->label('Customer'),
 
                 TextColumn::make('email'),
-                
+
                 TextColumn::make('phone')
-                    ->label('Phone_No')
-                    ->searchable(),
+                    ->label('Phone_No'),
 
                 TextColumn::make('address')
                     ->label('Address')
-                    ->searchable(),
+                    ->limit(30),
             ])
             ->filters([
                 //
@@ -50,7 +50,21 @@ class ListCustomers extends Component implements HasActions, HasSchemas, HasTabl
                 //
             ])
             ->recordActions([
-                //
+                Action::make('edit')
+                    ->url(fn (Customer $record): string => route('customer.update', $record))
+                    ->openUrlInNewTab(),
+
+                Action::make('Delete')
+                // ->Icon('heroicon-o-trash')
+                    ->requiresConfirmation()
+                    ->color('danger')
+                    ->action(fn (Customer $record) => $record->delete())
+                    ->successNotification(
+                        Notification::make()
+                            ->success()
+                            ->title('Customer deleted successfully')
+                            //->body('Inventory Deleted successfully.')
+                    ),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

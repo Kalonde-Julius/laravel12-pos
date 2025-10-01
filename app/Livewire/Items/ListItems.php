@@ -49,9 +49,16 @@ class ListItems extends Component implements HasActions, HasSchemas, HasTable
                 //
             ])
             ->headerActions([
-                //
+                Action::make('create')
+                    ->label('Add New Item')
+                    ->url(fn (): string => route('item.create'))
+                    ->openUrlInNewTab(),
             ])
             ->recordActions([
+                Action::make('edit')
+                    ->url(fn (Item $record): string => route('item.update', $record))
+                    ->openUrlInNewTab(),
+
                 Action::make('Delete')
                // ->Icon('heroicon-o-trash')
                 ->requiresConfirmation()
@@ -60,9 +67,10 @@ class ListItems extends Component implements HasActions, HasSchemas, HasTable
                 ->successNotification(
                     Notification::make()
                         ->success()
-                        ->title('Deleted successfully'),
-                      //  ->body('Deleted successfully.'),
+                        ->title('Item deleted Successfully'),
+                       // ->body('Item Deleted successfully.'),
                 ),
+
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

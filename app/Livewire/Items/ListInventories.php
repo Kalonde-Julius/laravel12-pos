@@ -5,10 +5,12 @@ namespace App\Livewire\Items;
 use Livewire\Component;
 use App\Models\Inventory;
 use Filament\Tables\Table;
+use Filament\Actions\Action;
 use Illuminate\Contracts\View\View;
 use Filament\Actions\BulkActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Schemas\Contracts\HasSchemas;
@@ -47,7 +49,21 @@ class ListInventories extends Component implements HasActions, HasSchemas, HasTa
                 //
             ])
             ->recordActions([
-                //
+                 Action::make('edit')
+                    ->url(fn (Inventory $record): string => route('inventory.update', $record))
+                    ->openUrlInNewTab(),
+
+                 Action::make('Delete')
+               // ->Icon('heroicon-o-trash')
+                ->requiresConfirmation()
+                ->color('danger')
+                ->action(fn (Inventory $record) => $record->delete())
+                ->successNotification(
+                    Notification::make()
+                        ->success()
+                        ->title('Inventory deleted successfully')
+                        //->body('Inventory Deleted successfully.')
+                ),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
