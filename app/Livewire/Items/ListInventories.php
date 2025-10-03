@@ -29,8 +29,9 @@ class ListInventories extends Component implements HasActions, HasSchemas, HasTa
         return $table
             ->query(fn (): Builder => Inventory::query())
             ->columns([
+
                 TextColumn::make('item.name')
-                    ->label('Item Name')
+                    ->label('Item / Product')
                     ->searchable(),
 
                 TextColumn::make('quantity')
@@ -46,7 +47,10 @@ class ListInventories extends Component implements HasActions, HasSchemas, HasTa
                 //
             ])
             ->headerActions([
-                //
+                Action::make('create')
+                    ->label('Add New Inventory')
+                    ->url(fn (): string => route('inventory.create'))
+                    ->openUrlInNewTab(),
             ])
             ->recordActions([
                  Action::make('edit')

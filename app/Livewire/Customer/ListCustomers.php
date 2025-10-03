@@ -29,15 +29,22 @@ class ListCustomers extends Component implements HasActions, HasSchemas, HasTabl
         return $table
             ->query(fn (): Builder => Customer::query())
             ->columns([
-                TextColumn::make('id'),
+                TextColumn::make('id')
+                    ->label('ID')
+                    ->searchable()
+                    ->sortable(),
 
                 TextColumn::make('name')
-                    ->label('Customer'),
+                    ->label('Customer')
+                    ->searchable(),
 
-                TextColumn::make('email'),
+                TextColumn::make('email')
+                    ->label('Email')
+                    ->searchable(),
 
                 TextColumn::make('phone')
-                    ->label('Phone_No'),
+                    ->label('Phone_No')
+                    ->searchable(),
 
                 TextColumn::make('address')
                     ->label('Address')
@@ -47,7 +54,10 @@ class ListCustomers extends Component implements HasActions, HasSchemas, HasTabl
                 //
             ])
             ->headerActions([
-                //
+                Action::make('create')
+                    ->label('Add New Customer')
+                    ->url(fn (): string => route('customer.create'))
+                    ->openUrlInNewTab(),
             ])
             ->recordActions([
                 Action::make('edit')

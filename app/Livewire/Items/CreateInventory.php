@@ -2,20 +2,22 @@
 
 namespace App\Livewire\Items;
 
-use App\Models\Item;
 use Livewire\Component;
+use App\Models\Inventory;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\View\View;
+use function Laravel\Prompts\select;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Section;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Schemas\Contracts\HasSchemas;
-use Filament\Forms\Components\ToggleButtons;
+
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 
-class CreateItem extends Component implements HasActions, HasSchemas
+class CreateInventory extends Component implements HasActions, HasSchemas
 {
     use InteractsWithActions;
     use InteractsWithSchemas;
@@ -31,54 +33,45 @@ class CreateItem extends Component implements HasActions, HasSchemas
     {
         return $schema
             ->components([
-                Section::make('Create Item')
-                    ->description('Add new item to the inventory')
+                Section::make('Create Inventory')
+                    ->description('Add new inventory')
                     ->columns(['md' => 2])
                     ->schema([
-                        TextInput::make('name')
-                            ->label('Item/Product')
+                        Select::make('item_id')
+                            ->label('Item / Product')
+                            ->relationship('item', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->native(false)
                             ->required(),
 
-                        TextInput::make('sku')
-                            ->label('SKU')
+                        TextInput::make('quantity')
+                            ->label('Quantity')
                             ->required()
-                            ->unique(),
-
-                        TextInput::make('price')
-                            ->prefix('UGX')
-                            ->numeric()
-                            ->required(),
-
-                        ToggleButtons::make('status')
-                        ->label('Is this Item Active ?')
-                        ->options([
-                            'active' => 'Active',
-                            'inactive' => 'Inactive',
-                        ])
-                        ->grouped()
+                            ->numeric(),
                     ])
-            ])
+                 ])
             ->statePath('data')
-            ->model(Item::class);
+            ->model(Inventory::class);
     }
 
     public function create(): void
     {
         $data = $this->form->getState();
 
-        $record = Item::create($data);
+        $record = Inventory::create($data);
 
         $this->form->model($record)->saveRelationships();
 
         Notification::make()
             ->title('Created !')
-            ->body("Item created successfully")
+            ->body("Inventory created successfully")
             ->success()
             ->send();
     }
 
     public function render(): View
     {
-        return view('livewire.items.create-item');
+        return view('livewire.items.create-inventory');
     }
 }

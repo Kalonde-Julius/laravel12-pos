@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Livewire\Items;
+namespace App\Livewire\Customer;
 
-use App\Models\Item;
 use Livewire\Component;
+use App\Models\Customer;
 use Filament\Schemas\Schema;
 use Illuminate\Contracts\View\View;
 use Filament\Forms\Components\TextInput;
@@ -11,11 +11,10 @@ use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Section;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Schemas\Contracts\HasSchemas;
-use Filament\Forms\Components\ToggleButtons;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Schemas\Concerns\InteractsWithSchemas;
 
-class CreateItem extends Component implements HasActions, HasSchemas
+class CreateCustomer extends Component implements HasActions, HasSchemas
 {
     use InteractsWithActions;
     use InteractsWithSchemas;
@@ -31,54 +30,47 @@ class CreateItem extends Component implements HasActions, HasSchemas
     {
         return $schema
             ->components([
-                Section::make('Create Item')
-                    ->description('Add new item to the inventory')
+                Section::make('Create Customer')
+                    ->description('Add new customer details')
                     ->columns(['md' => 2])
                     ->schema([
                         TextInput::make('name')
-                            ->label('Item/Product')
-                            ->required(),
+                            ->label('Customer'),
 
-                        TextInput::make('sku')
-                            ->label('SKU')
-                            ->required()
+                        TextInput::make('email')
+                            ->label('Email')
                             ->unique(),
 
-                        TextInput::make('price')
-                            ->prefix('UGX')
-                            ->numeric()
-                            ->required(),
+                        TextInput::make('phone')
+                            ->label('Phone_No')
+                            ->unique(),
 
-                        ToggleButtons::make('status')
-                        ->label('Is this Item Active ?')
-                        ->options([
-                            'active' => 'Active',
-                            'inactive' => 'Inactive',
-                        ])
-                        ->grouped()
+                        TextInput::make('address')
+                            ->label('Address'),
+
                     ])
             ])
             ->statePath('data')
-            ->model(Item::class);
+            ->model(Customer::class);
     }
 
     public function create(): void
     {
         $data = $this->form->getState();
 
-        $record = Item::create($data);
+        $record = Customer::create($data);
 
         $this->form->model($record)->saveRelationships();
 
         Notification::make()
             ->title('Created !')
-            ->body("Item created successfully")
+            ->body("Customer created successfully")
             ->success()
             ->send();
     }
 
     public function render(): View
     {
-        return view('livewire.items.create-item');
+        return view('livewire.customer.create-customer');
     }
 }
