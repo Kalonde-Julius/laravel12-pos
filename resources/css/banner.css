@@ -1,0 +1,62 @@
+
+  .moved-banner {
+    background: radial-gradient(circle at top right, #0a84ff, #001f3f 80%);
+    text-align: center;
+    border-radius: 12px;
+
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+    animation: fadeIn 1.2s ease-in-out;
+  }
+
+  .moved-banner .highlight {
+    color: #00d8ff;
+    text-shadow: 0 0 10px rgba(0,216,255,0.6);
+  }
+
+  .moved-banner p {
+    font-size: 1.1rem;
+    color: #cde8ff;
+    margin-bottom: 25px;
+  }
+
+  .moved-banner .visit-btn {
+    background: #00d8ff;
+    color: #001a33;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.3s;
+    box-shadow: 0 0 20px rgba(0,216,255,0.4);
+  }
+
+  .moved-banner .visit-btn:hover {
+    background: #00b4cc;
+    box-shadow: 0 0 30px rgba(0,216,255,0.7);
+    transform: scale(1.05);
+  }
+
+  .moved-banner .arrow {
+    font-size: 2.5rem;
+    color: #00d8ff;
+    margin: 15px 0;
+    animation: bounce 1.5s infinite;
+  }
+
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .moved-banner h1 { font-size: 1.8rem; }
+    .moved-banner p { font-size: 1rem; }
+  }
+
